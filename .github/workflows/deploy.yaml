@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,12 +27,14 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/genai-app/genai-app:${{ github.sha }} \
-                       -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/genai-app/genai-app:latest .
+          docker build \
+            -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/genai-app/genai-app:${{ github.sha }} \
+            -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/genai-app/genai-app:latest .
 
       - name: Test Docker Image
         run: |
-          docker run --rm -e GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
+          docker run --rm \
+            -e GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
             asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/genai-app/genai-app:${{ github.sha }} \
             python -c "import genai_app; print('App module loaded successfully')"
 
@@ -61,5 +64,3 @@ jobs:
         run: |
           git remote add space https://huggingface.co/spaces/Roshank1/genai-app || true
           git push https://user:${HF_TOKEN}@huggingface.co/spaces/Roshank1/genai-app main --force
-
-git push https://user:${HF_TOKEN}@huggingface.co/spaces/Roshank1/genai-app main --force
