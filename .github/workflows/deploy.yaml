@@ -64,3 +64,4 @@ jobs:
         run: |
           git remote add space https://huggingface.co/spaces/Roshank1/genai-app || true
           git push https://user:${HF_TOKEN}@huggingface.co/spaces/Roshank1/genai-app main --force
+          echo "Pushed to Hugging Face Space successfully"
